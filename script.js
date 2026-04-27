@@ -7,7 +7,7 @@ const menuData = [
         category: 'pollo-frito',
         price: 1500,
         description: 'Delicioso pollo frito crujiente con muslo y cadera',
-        image: null,
+        image: 'images/pollo-caribeno.jpg',
         customizations: ['sauces', 'sides']
     },
     {
@@ -16,7 +16,7 @@ const menuData = [
         category: 'pollo-frito',
         price: 2200,
         description: 'Pollo frito completo con arroz, ensalada y papas',
-        image: null,
+        image: 'images/pollo-caribeno-arreglado.jpg',
         customizations: ['sauces', 'preferences']
     },
     {
@@ -25,7 +25,7 @@ const menuData = [
         category: 'pollo-frito',
         price: 2000,
         description: 'Pechuga y ala de pollo frito crujiente',
-        image: null,
+        image: 'images/pollo-patacones.jpg',
         customizations: ['sauces', 'sides']
     },
     {
@@ -34,7 +34,7 @@ const menuData = [
         category: 'pollo-frito',
         price: 2800,
         description: 'Combo completo de pollo frito con acompañamientos',
-        image: null,
+        image: 'images/combo-caribeno.jpg',
         customizations: ['sauces', 'preferences']
     },
     // Pollo Caribeño
@@ -44,7 +44,7 @@ const menuData = [
         category: 'pollo-caribeno',
         price: 1800,
         description: 'Pollo con sabor caribeño especial',
-        image: null,
+        image: 'images/pollo-caribeno.jpg',
         customizations: ['sauces', 'sides']
     },
     {
@@ -53,7 +53,7 @@ const menuData = [
         category: 'pollo-caribeno',
         price: 2500,
         description: 'Pechuga y ala con sazón del Caribe',
-        image: null,
+        image: 'images/pollo-caribeno-arreglado.jpg',
         customizations: ['sauces', 'sides']
     },
     // Papas Nacho
@@ -362,7 +362,7 @@ const menuData = [
         category: 'otros',
         price: 2500,
         description: 'Porción de 150 gramos',
-        image: null,
+        image: 'images/mogambos.png',
         customizations: ['sauces']
     },
     {
@@ -371,7 +371,7 @@ const menuData = [
         category: 'otros',
         price: 4500,
         description: 'Porción de 300 gramos',
-        image: null,
+        image: 'images/mogambos.png',
         customizations: ['sauces']
     },
     {
@@ -479,9 +479,10 @@ function renderMenu(filter = 'all') {
     
     menuGrid.innerHTML = filteredMenu.map(item => `
         <div class="menu-item" onclick="openProductModal('${item.id}')">
-            <div class="menu-item-image" style="background: linear-gradient(135deg, #00CED1 0%, #0E7C7B 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-                🍗
-            </div>
+            ${item.image 
+                ? `<img src="${item.image}" alt="${item.name}" class="menu-item-image" style="object-fit: cover;">`
+                : `<div class="menu-item-image" style="background: linear-gradient(135deg, #00CED1 0%, #0E7C7B 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🍗</div>`
+            }
             <div class="menu-item-content">
                 <div class="menu-item-header">
                     <h3 class="menu-item-name">${item.name}</h3>
@@ -526,9 +527,10 @@ function openProductModal(productId) {
     
     content.innerHTML = `
         <div class="product-detail">
-            <div class="product-detail-image" style="background: linear-gradient(135deg, #00CED1 0%, #0E7C7B 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 5rem;">
-                🍗
-            </div>
+            ${product.image 
+                ? `<img src="${product.image}" alt="${product.name}" class="product-detail-image" style="object-fit: cover;">`
+                : `<div class="product-detail-image" style="background: linear-gradient(135deg, #00CED1 0%, #0E7C7B 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 5rem;">🍗</div>`
+            }
             <div class="product-detail-header">
                 <h3 class="product-detail-name">${product.name}</h3>
                 <span class="product-detail-price">₡${product.price.toLocaleString()}</span>

@@ -2,6 +2,25 @@
 
 Sistema completo de gestión de pedidos para restaurante de comida rápida con estética inspirada en el Caribe Limonense de Costa Rica.
 
+## 📁 Estructura de Archivos
+
+```
+soda-la-yayis/
+├── index.html          # Página principal
+├── styles.css          # Estilos CSS
+├── script.js           # Lógica JavaScript
+├── README.md           # Este archivo
+└── images/             # Carpeta de imágenes
+    ├── pollo-caribeno.jpg
+    ├── pollo-caribeno-arreglado.jpg
+    ├── pollo-patacones.jpg
+    ├── combo-caribeno.jpg
+    ├── mogambos.png
+    └── ceviche.jpg
+```
+
+**IMPORTANTE**: Asegúrate de mantener la carpeta `images/` en la raíz junto con los demás archivos.
+
 ## ✨ Características
 
 ### Para Clientes
