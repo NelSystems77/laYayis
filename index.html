@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soda La Yayis - Pedidos en Línea</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Vista Principal del Cliente -->
+        <div id="customer-view" class="view active">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-pattern"></div>
+                <div class="header-content">
+                    <div class="logo-container">
+                        <div class="logo-circle">
+                            <span class="logo-text">SLY</span>
+                        </div>
+                        <div class="logo-info">
+                            <h1 class="logo-title">Soda La Yayis</h1>
+                            <p class="logo-subtitle">Todo en comidas rápidas</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-track" onclick="showTrackOrder()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            Rastrear Pedido
+                        </button>
+                        <button class="btn-admin" onclick="showAdminLogin()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Admin
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Carrito flotante -->
+            <div id="cart-float" class="cart-float" onclick="toggleCart()">
+                <div class="cart-icon-container">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </div>
+                <span class="cart-total" id="cart-total">₡0</span>
+            </div>
+
+            <!-- Menú -->
+            <main class="main-content">
+                <div class="container">
+                    <div class="menu-header">
+                        <h2 class="section-title">Nuestro Menú</h2>
+                        <div class="delivery-options">
+                            <button class="delivery-btn active" data-type="delivery">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                                Delivery
+                            </button>
+                            <button class="delivery-btn" data-type="pickup">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                                Recoger
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Categorías -->
+                    <div class="category-filter">
+                        <button class="category-btn active" data-category="all">Todos</button>
+                        <button class="category-btn" data-category="pollo-frito">Pollo Frito</button>
+                        <button class="category-btn" data-category="pollo-caribeno">Pollo Caribeño</button>
+                        <button class="category-btn" data-category="otros">Otros Platillos</button>
+                        <button class="category-btn" data-category="bebidas">Bebidas</button>
+                    </div>
+
+                    <!-- Banner Próximamente -->
+                    <div class="coming-soon-banner">
+                        <div class="coming-soon-icon">✨</div>
+                        <div class="coming-soon-content">
+                            <h3 class="coming-soon-title">Muy Pronto</h3>
+                            <p class="coming-soon-text">Nuestros Deliciosos Casados...</p>
+                            <div class="coming-soon-decoration">🍽️ 🌴 🥘</div>
+                        </div>
+                        <div class="coming-soon-icon">✨</div>
+                    </div>
+
+                    <!-- Grid de productos -->
+                    <div id="menu-grid" class="menu-grid"></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal del Carrito -->
+        <div id="cart-modal" class="modal">
+            <div class="modal-content cart-modal-content">
+                <div class="modal-header">
+                    <h3>Tu Pedido</h3>
+                    <button class="close-btn" onclick="toggleCart()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div id="cart-items" class="cart-items"></div>
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">₡0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">₡0</span>
+                    </div>
+                </div>
+                <button class="btn-primary btn-checkout" onclick="showCheckout()">Continuar al Pago</button>
+            </div>
+        </div>
+
+        <!-- Modal de Checkout -->
+        <div id="checkout-modal" class="modal">
+            <div class="modal-content checkout-modal-content">
+                <div class="modal-header">
+                    <h3>Finalizar Pedido</h3>
+                    <button class="close-btn" onclick="closeCheckout()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <form id="checkout-form" class="checkout-form">
+                    <div class="form-section">
+                        <h4>Información Personal</h4>
+                        <div class="form-group">
+                            <label for="customer-name">Nombre Completo *</label>
+                            <input type="text" id="customer-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customer-phone">Teléfono *</label>
+                            <input type="tel" id="customer-phone" placeholder="8888-8888" required>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="delivery-section">
+                        <h4>Dirección de Entrega</h4>
+                        <div class="form-group">
+                            <label for="customer-address">Dirección Completa *</label>
+                            <textarea id="customer-address" rows="3" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Notas Especiales</h4>
+                        <div class="form-group">
+                            <label for="special-notes">Preferencias del pedido</label>
+                            <textarea id="special-notes" rows="3" placeholder="Ej: Sin cebolla, salsas aparte, sin lechuga..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="payment-section">
+                        <h4>Método de Pago</h4>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="sinpe" required>
+                                <span class="payment-label">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                                    </svg>
+                                    SINPE
+                                </span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="efectivo">
+                                <span class="payment-label">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                    </svg>
+                                    Efectivo al recibir
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="checkout-summary">
+                        <div class="summary-detail">
+                            <span>Tipo de entrega:</span>
+                            <strong id="delivery-type-text">Delivery</strong>
+                        </div>
+                        <div class="summary-detail">
+                            <span>Total a pagar:</span>
+                            <strong id="checkout-total" class="checkout-total">₡0</strong>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-submit">Realizar Pedido</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmación -->
+        <div id="confirmation-modal" class="modal">
+            <div class="modal-content confirmation-modal-content">
+                <div class="success-icon">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h3>¡Pedido Realizado!</h3>
+                <p>Tu pedido ha sido enviado exitosamente</p>
+                <div class="order-number">
+                    <span>Número de Pedido:</span>
+                    <strong id="order-number"></strong>
+                </div>
+                <p class="confirmation-text">Te hemos enviado los detalles por WhatsApp. Puedes rastrear tu pedido con el número proporcionado.</p>
+                <div class="confirmation-actions">
+                    <button class="btn-primary" onclick="trackCurrentOrder()">Rastrear Pedido</button>
+                    <button class="btn-secondary" onclick="closeConfirmation()">Hacer Otro Pedido</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Rastreo -->
+        <div id="track-modal" class="modal">
+            <div class="modal-content track-modal-content">
+                <div class="modal-header">
+                    <h3>Rastrear Pedido</h3>
+                    <button class="close-btn" onclick="closeTrackModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="track-input-section">
+                    <input type="text" id="track-order-id" placeholder="Ingresa tu número de pedido">
+                    <button class="btn-primary" onclick="trackOrder()">Buscar</button>
+                </div>
+                <div id="track-result" class="track-result"></div>
+            </div>
+        </div>
+
+        <!-- Modal de Login Admin -->
+        <div id="admin-login-modal" class="modal">
+            <div class="modal-content admin-login-content">
+                <div class="modal-header">
+                    <h3>Acceso Administrador</h3>
+                    <button class="close-btn" onclick="closeAdminLogin()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <form id="admin-login-form" class="admin-login-form">
+                    <div class="form-group">
+                        <label for="admin-password">Contraseña</label>
+                        <input type="password" id="admin-password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Ingresar</button>
+                    <p class="hint-text">Contraseña por defecto: admin123</p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Panel de Administración -->
+        <div id="admin-view" class="view">
+            <div class="admin-header">
+                <h2>Panel de Administración</h2>
+                <button class="btn-secondary" onclick="logoutAdmin()">Cerrar Sesión</button>
+            </div>
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <h4>Pedidos Hoy</h4>
+                    <span class="stat-number" id="stat-today">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Pendientes</h4>
+                    <span class="stat-number" id="stat-pending">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>En Preparación</h4>
+                    <span class="stat-number" id="stat-preparing">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Hoy</h4>
+                    <span class="stat-number" id="stat-revenue">₡0</span>
+                </div>
+            </div>
+            <div class="admin-filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="received">Recibido</button>
+                <button class="filter-btn" data-filter="preparing">En Preparación</button>
+                <button class="filter-btn" data-filter="ready">Listo</button>
+                <button class="filter-btn" data-filter="completed">Completado</button>
+            </div>
+            <div id="admin-orders" class="admin-orders"></div>
+        </div>
+
+        <!-- Modal de Producto -->
+        <div id="product-modal" class="modal">
+            <div class="modal-content product-modal-content">
+                <button class="close-btn" onclick="closeProductModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div id="product-modal-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
